@@ -2,11 +2,17 @@ import os, re
 
 def main():
   semver_info = get_semver()
+  if semver_info["initial_version"]:
+    print("Semantic version not found, using initial version " + semver_info["semver"])
+  else:
+    print("Using semantic version " + semver_info["semver"])
   semver = split_semver(semver_info["semver"])
   initial_version = semver_info["initial_version"]
   increment = (os.getenv('PLUGIN_AUTOINCREMENT', 'false') == 'true')
   if increment and not initial_version:
+    print("Running auto-increment")
     auto_increment(semver)
+    print("Updated semantic version to " + semver_string(semver))
   save(semver)
 
 def get_semver():
@@ -35,13 +41,16 @@ def split_semver(semver):
 def auto_increment(semver):
   level = increment_level()
   if level == "major":
+    print("Found major changes, updating major version...")
     semver["major"] += 1
     semver["minor"] = 0
     semver["patch"] = 0
   elif level == "minor":
+    print("Found minor changes, updating minor version...")
     semver["minor"] += 1
     semver["patch"] = 0
   else:
+    print("No major or minor changes found, updating patch version...")
     semver["patch"] += 1
 
 def increment_level():
@@ -66,10 +75,13 @@ def increment_level():
     return "patch"
   return
 
+def semver_string(semver):
+  return str(semver["major"]) + "." + str(semver["minor"]) + "." + str(semver["patch"])
+
 def save(semver):
-  semver_string = str(semver["major"]) + "." + str(semver["minor"]) + "." + str(semver["patch"])
   output = open("semver", "w", newline="\n")
-  output.write(semver_string + "\n")
+  output.write(semver_string(semver) + "\n")
   output.close()
+  print("Saved new semantic version to semver file")
 
 main()
