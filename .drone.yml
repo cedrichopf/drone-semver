@@ -1,0 +1,27 @@
+---
+kind: pipeline
+type: docker
+name: pull-request
+
+trigger:
+  branch:
+    - master
+  event:
+    - pull_request
+
+steps:
+  - name: without-increment
+    image: python:3
+    commands:
+      - "python main.py"
+    settings:
+      file: "CHANGELOG.example.md"
+      autoincrement: false
+  - name: with-increment
+    image: python:3
+    commands:
+      - "export DRONE_SEMVER=1.0.0"
+      - "python main.py"
+    settings:
+      file: "CHANGELOG.example.md"
+      autoincrement: true
