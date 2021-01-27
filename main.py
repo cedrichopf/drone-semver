@@ -36,8 +36,11 @@ def auto_increment(semver):
   level = increment_level()
   if level == "major":
     semver["major"] += 1
+    semver["minor"] = 0
+    semver["patch"] = 0
   elif level == "minor":
     semver["minor"] += 1
+    semver["patch"] = 0
   else:
     semver["patch"] += 1
 
