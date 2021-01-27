@@ -31,3 +31,8 @@ steps:
     settings:
       file: "CHANGELOG.example.md"
       autoincrement: true
+  - name: docker-build
+    image: plugins/docker
+    settings:
+      repo: cedrichopf/drone-semver
+      dry_run: true
