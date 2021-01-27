@@ -1,13 +1,13 @@
 import os, re
 
 def main():
-  semver_dictionary = get_semver()
-  semver = split_semver(semver_dictionary["semver"])
-  initial_version = semver_dictionary["initial_version"]
+  semver_info = get_semver()
+  semver = split_semver(semver_info["semver"])
+  initial_version = semver_info["initial_version"]
   increment = (os.getenv('PLUGIN_AUTOINCREMENT', 'false') == 'true')
   if increment and not initial_version:
     auto_increment(semver)
-  print(semver)
+  save(semver)
 
 def get_semver():
   semver = os.getenv("DRONE_SEMVER")
@@ -53,8 +53,9 @@ def increment_level():
   major_keyword = major_env if major_env else "Major"
   minor_keyword = minor_env if minor_env else "Minor"
 
-  changelog = open(file_path) if file_path else open("CHANGELOG.md")
+  changelog = open(file_path, "r") if file_path else open("CHANGELOG.md", "r")
   content = changelog.read()
+  changelog.close()
   expression = repr(expression_string) if expression_string else r"\[(\d\.){2}\d\]"
   section = re.split(expression, content)[0]
   if major_keyword in section:
@@ -64,5 +65,11 @@ def increment_level():
   else:
     return "patch"
   return
+
+def save(semver):
+  semver_string = str(semver["major"]) + "." + str(semver["minor"]) + "." + str(semver["patch"])
+  output = open("semver", "w", newline="\n")
+  output.write(semver_string + "\n")
+  output.close()
 
 main()

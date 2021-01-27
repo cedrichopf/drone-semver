@@ -13,15 +13,21 @@ steps:
   - name: without-increment
     image: python:3
     commands:
-      - "python main.py"
+      - python main.py
+      - cat semver
+      # Sleep 1 second to ensure the output of cat is displayed
+      - sleep 1
     settings:
       file: "CHANGELOG.example.md"
       autoincrement: false
-  - name: with-increment
+  - name: with-major-increment
     image: python:3
     commands:
-      - "export DRONE_SEMVER=1.0.1"
-      - "python main.py"
+      - export DRONE_SEMVER=1.0.1
+      - python main.py
+      - cat semver
+      # Sleep 1 second to ensure the output of cat is displayed
+      - sleep 1
     settings:
       file: "CHANGELOG.example.md"
       autoincrement: true
