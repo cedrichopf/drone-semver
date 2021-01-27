@@ -20,7 +20,7 @@ steps:
   - name: with-increment
     image: python:3
     commands:
-      - "export DRONE_SEMVER=1.0.0"
+      - "export DRONE_SEMVER=1.0.1"
       - "python main.py"
     settings:
       file: "CHANGELOG.example.md"
