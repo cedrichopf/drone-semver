@@ -54,4 +54,4 @@ steps:
       repo: cedrichopf/drone-semver
       dry_run: true
     environment:
-      TEST: cat semver
+      TEST: ${cat semver}
