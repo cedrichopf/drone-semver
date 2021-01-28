@@ -79,8 +79,8 @@ def semver_string(semver):
   return str(semver["major"]) + "." + str(semver["minor"]) + "." + str(semver["patch"])
 
 def save(semver):
-  output = open("semver", "w", newline="\n")
-  output.write(semver_string(semver) + "\n")
+  output = open("semver", "w")
+  output.write(semver_string(semver))
   output.close()
   print("Saved new semantic version to semver file")
 

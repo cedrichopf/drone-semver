@@ -10,26 +10,40 @@ trigger:
     - pull_request
 
 steps:
-  - name: without-increment
+  - name: with-initial-version
     image: python:3
     commands:
       - python main.py
-      - cat semver
-      # Sleep 1 second to ensure the output of cat is displayed
-      - sleep 1
+      - python ci/validator.py 1.0.0
     settings:
       file: "CHANGELOG.example.md"
       autoincrement: false
-  - name: with-major-increment
+  - name: with-major-update
     image: python:3
     commands:
       - export DRONE_SEMVER=1.0.1
       - python main.py
-      - cat semver
-      # Sleep 1 second to ensure the output of cat is displayed
-      - sleep 1
+      - python ci/validator.py 2.0.0
     settings:
-      file: "CHANGELOG.example.md"
+      file: "examples/Major.md"
+      autoincrement: true
+  - name: with-minor-update
+    image: python:3
+    commands:
+      - export DRONE_SEMVER=1.0.1
+      - python main.py
+      - python ci/validator.py 1.1.0
+    settings:
+      file: "examples/Minor.md"
+      autoincrement: true
+  - name: with-patch-update
+    image: python:3
+    commands:
+      - export DRONE_SEMVER=1.0.1
+      - python main.py
+      - python ci/validator.py 1.0.2
+    settings:
+      file: "examples/Patch.md"
       autoincrement: true
   - name: docker-build
     image: plugins/docker
