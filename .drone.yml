@@ -48,10 +48,6 @@ steps:
       autoincrement: true
   - name: docker-build
     image: plugins/docker
-    commands:
-      - echo $TEST
     settings:
       repo: cedrichopf/drone-semver
       dry_run: true
-    environment:
-      TEST: ${cat semver}
