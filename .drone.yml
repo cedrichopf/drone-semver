@@ -13,10 +13,11 @@ steps:
   - name: with-initial-version
     image: python:3
     commands:
+      - unset DRONE_SEMVER
       - python main.py
       - python ci/validator.py 1.0.0
     settings:
-      file: "CHANGELOG.example.md"
+      file: "examples/Major.md"
       autoincrement: false
   - name: with-major-update
     image: python:3

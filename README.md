@@ -1,5 +1,7 @@
 # Drone CI Plugin for Semantic Versioning
 
+## Environment Variables
+
 | Name                   | Description                                                 | Default Value     |
 | ---------------------- | ----------------------------------------------------------- | ----------------- |
 | DRONE_SEMVER           | Drone CI semver string, injected by Drone CI                | `-`               |
