@@ -57,7 +57,8 @@ def increment_level():
   major_env = os.getenv("PLUGIN_MAJOR_KEYWORD")
   minor_env = os.getenv("PLUGIN_MINOR_KEYWORD")
   file_path = os.getenv("PLUGIN_FILE")
-  expression_string = os.getenv("PLUGIN_FILE_REGEX")
+  use_regex = (os.getenv('PLUGIN_USE_REGEX', 'true') == 'true')
+  regex_string = os.getenv("PLUGIN_FILE_REGEX")
 
   major_keyword = major_env if major_env else "Major"
   minor_keyword = minor_env if minor_env else "Minor"
@@ -65,15 +66,14 @@ def increment_level():
   changelog = open(file_path, "r") if file_path else open("CHANGELOG.md", "r")
   content = changelog.read()
   changelog.close()
-  expression = r'{}'.format(expression_string) if expression_string else r"\[(\d\.){2}\d\]"
-  section = re.split(expression, content)[0]
+  regex = r'{}'.format(regex_string) if regex_string else r"\[(\d\.){2}\d\]"
+  section = re.split(regex, content)[0] if use_regex else content
   if major_keyword in section:
     return "major"
   elif minor_keyword in section:
     return "minor"
   else:
     return "patch"
-  return
 
 def semver_string(semver):
   return str(semver["major"]) + "." + str(semver["minor"]) + "." + str(semver["patch"])
