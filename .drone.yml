@@ -49,8 +49,9 @@ steps:
   - name: docker-build
     image: plugins/docker
     commands:
-      - echo "Hello World"
-      - /usr/local/bin/dockerd-entrypoint.sh /bin/drone-docker
+      - echo $TEST
     settings:
       repo: cedrichopf/drone-semver
       dry_run: true
+    environment:
+      TEST: cat semver
