@@ -65,7 +65,7 @@ def increment_level():
   changelog = open(file_path, "r") if file_path else open("CHANGELOG.md", "r")
   content = changelog.read()
   changelog.close()
-  expression = repr(expression_string) if expression_string else r"\[(\d\.){2}\d\]"
+  expression = r'{}'.format(expression_string) if expression_string else r"\[(\d\.){2}\d\]"
   section = re.split(expression, content)[0]
   if major_keyword in section:
     return "major"
