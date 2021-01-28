@@ -48,6 +48,8 @@ steps:
       autoincrement: true
   - name: docker-build
     image: plugins/docker
+    commands:
+      - echo "Hello World"
     settings:
       repo: cedrichopf/drone-semver
       dry_run: true
