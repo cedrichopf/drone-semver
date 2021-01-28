@@ -50,7 +50,7 @@ steps:
     image: plugins/docker
     commands:
       - echo "Hello World"
-      - /bin/drone-docker
+      - /usr/local/bin/dockerd-entrypoint.sh /bin/drone-docker
     settings:
       repo: cedrichopf/drone-semver
       dry_run: true
