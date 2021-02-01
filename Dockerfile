@@ -12,4 +12,4 @@ COPY . /app
 LABEL name=drone-semver
 LABEL maintainer="hopf.cedric@gmail.com"
 
-CMD ["python", "main.py"]
+CMD ["python", "/app/main.py"]
