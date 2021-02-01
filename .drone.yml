@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: pull-request
+name: Pull-Request
 
 trigger:
   branch:
@@ -46,8 +46,73 @@ steps:
     settings:
       file: "examples/Patch.md"
       autoincrement: true
+  - name: with-non-existing-file
+    image: python:3
+    commands:
+      - export DRONE_SEMVER=2.0.0
+      - python main.py
+      - python ci/validator.py 2.0.1
+    settings:
+      file: "examples/Non-Exist.md"
+      autoincrement: true
   - name: docker-build
     image: plugins/docker
     settings:
       repo: cedrichopf/drone-semver
       dry_run: true
+
+---
+kind: pipeline
+type: docker
+name: Release
+
+trigger:
+  event:
+    - tag
+
+steps:
+  - name: create-tarball
+    image: ubuntu:latest
+    commands:
+      - "tar -czvf drone-semver-v${DRONE_SEMVER}.tar.gz main.py README.md LICENSE"
+  - name: publish-github-release
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: github_access_token
+      files:
+        - drone-semver-*.tar.gz
+      checksum:
+        - sha256
+        - sha512
+  - name: publish-docker-image
+    image: plugins/docker
+    settings:
+      auto_tag: true
+      repo: cedrichopf/drone-semver
+      username:
+        from_secret: docker_hub_username
+      password:
+        from_secret: docker_hub_password
+
+---
+kind: pipeline
+type: docker
+name: Latest-Release
+
+trigger:
+  branch:
+    - master
+  event:
+    - push
+
+steps:
+  - name: publish-docker-image
+    image: plugins/docker
+    settings:
+      tags: latest
+      repo: cedrichopf/drone-semver
+      username:
+        from_secret: docker_hub_username
+      password:
+        from_secret: docker_hub_password

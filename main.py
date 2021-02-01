@@ -63,6 +63,12 @@ def increment_level():
   major_keyword = major_env if major_env else "Major"
   minor_keyword = minor_env if minor_env else "Minor"
 
+  if not os.path.isfile(file_path):
+    print("File <" + file_path + "> doesn't exist, using CHANGELOG.md")
+    if not os.path.isfile("CHANGELOG.md"):
+      print("File <CHANGELOG.md> doesn't exist, using patch level")
+      return "patch"
+
   changelog = open(file_path, "r") if file_path else open("CHANGELOG.md", "r")
   content = changelog.read()
   changelog.close()
