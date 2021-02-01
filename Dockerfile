@@ -9,6 +9,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY . /app
 
+LABEL name=drone-semver
 LABEL maintainer="hopf.cedric@gmail.com"
 
 CMD ["python", "main.py"]
