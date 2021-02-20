@@ -79,7 +79,8 @@ steps:
     image: plugins/github-release
     settings:
       api_key:
-        from_secret: github_access_token
+        from_secret: GITHUB_API_TOKEN
+      title: v${DRONE_SEMVER}
       files:
         - drone-semver-*.tar.gz
       checksum:
@@ -91,9 +92,9 @@ steps:
       auto_tag: true
       repo: cedrichopf/drone-semver
       username:
-        from_secret: docker_hub_username
+        from_secret: DOCKER_HUB_USERNAME
       password:
-        from_secret: docker_hub_password
+        from_secret: DOCKER_HUB_PASSWORD
 
 ---
 kind: pipeline
@@ -113,6 +114,6 @@ steps:
       tags: latest
       repo: cedrichopf/drone-semver
       username:
-        from_secret: docker_hub_username
+        from_secret: DOCKER_HUB_USERNAME
       password:
-        from_secret: docker_hub_password
+        from_secret: DOCKER_HUB_PASSWORD
