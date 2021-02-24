@@ -86,7 +86,7 @@ steps:
       checksum:
         - sha256
         - sha512
-  - name: publish-docker-image
+  - name: push-to-docker-hub
     image: plugins/docker
     settings:
       auto_tag: true
@@ -95,6 +95,16 @@ steps:
         from_secret: DOCKER_HUB_USERNAME
       password:
         from_secret: DOCKER_HUB_PASSWORD
+  - name: push-to-github-packages
+    image: plugins/docker
+    settings:
+      auto_tag: true
+      repo: docker.pkg.github.com/cedrichopf/drone-semver/drone-semver
+      registry: docker.pkg.github.com
+      username:
+        from_secret: GITHUB_USERNAME
+      password:
+        from_secret: GITHUB_API_TOKEN
 
 ---
 kind: pipeline
@@ -108,7 +118,7 @@ trigger:
     - push
 
 steps:
-  - name: publish-docker-image
+  - name: push-to-docker-hub
     image: plugins/docker
     settings:
       tags: latest
@@ -117,3 +127,13 @@ steps:
         from_secret: DOCKER_HUB_USERNAME
       password:
         from_secret: DOCKER_HUB_PASSWORD
+  - name: push-to-github-packages
+    image: plugins/docker
+    settings:
+      tags: latest
+      repo: docker.pkg.github.com/cedrichopf/drone-semver/drone-semver
+      registry: docker.pkg.github.com
+      username:
+        from_secret: GITHUB_USERNAME
+      password:
+        from_secret: GITHUB_API_TOKEN
